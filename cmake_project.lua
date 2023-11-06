@@ -70,7 +70,21 @@ function m.generate(prj)
 	m.files(prj)
 	_p(')')
 
+	local standard = {}
+	standard["C++98"] = 98
+	standard["C++11"] = 11
+	standard["C++14"] = 14
+	standard["C++17"] = 17
+	standard["C++20"] = 20
+	standard["gnu++98"] = 98
+	standard["gnu++11"] = 11
+	standard["gnu++14"] = 14
+	standard["gnu++17"] = 17
+	standard["gnu++20"] = 20
+
 	for cfg in project.eachconfig(prj) do
+		_p('set_property(TARGET "%s" PROPERTY CXX_STANDARD %s)', prj.name, standard[cfg.cppdialect])
+		
 		local toolset = m.getcompiler(cfg)
 		local isclangorgcc = toolset == p.tools.clang or toolset == p.tools.gcc
 		_p('if(CMAKE_BUILD_TYPE STREQUAL %s)', cmake.cfgname(cfg))
