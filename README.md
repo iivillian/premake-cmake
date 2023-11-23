@@ -10,4 +10,4 @@
 premake5 cmake
 ```
 
-If using [vscode ](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cmake-tools)https://marketplace.visualstudio.com/items?itemName=ms-vscode.cmake-tools then enable "Cmake: Set Build Type On Multi Config".
+If using [vscode Cmake Tools](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cmake-tools) then enable "Cmake: Set Build Type On Multi Config".
