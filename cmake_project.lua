@@ -49,26 +49,42 @@ function m.generate(prj)
     -- if kind is only defined for configs, promote to project
     if prj.kind == nil then
         for cfg in project.eachconfig(prj) do
-            prj.kind = cfg.kind
+			_p('if(CMAKE_BUILD_TYPE STREQUAL %s)', cmake.cfgname(cfg))
+            
+			if cfg.kind == 'Utility' then
+				return
+			end
+
+			if cfg.kind == 'StaticLib' then
+				_p('add_library("%s" STATIC', prj.name)
+			elseif cfg.kind == 'SharedLib' then
+				_p('add_library("%s" SHARED', prj.name)
+			else
+				_p('add_executable("%s"', prj.name)
+			end
+			m.files(prj)
+			_p(')')
+
+			_p('endif()')
         end
-    end
-
-	if prj.kind == 'Utility' then
-		return
-	end
-
-	if prj.kind == 'StaticLib' then
-		_p('add_library("%s" STATIC', prj.name)
-	elseif prj.kind == 'SharedLib' then
-		_p('add_library("%s" SHARED', prj.name)
-	else
-		if prj.executable_suffix then
-			_p('set(CMAKE_EXECUTABLE_SUFFIX "%s")', prj.executable_suffix)
+	else 
+		if prj.kind == 'Utility' then
+			return
 		end
-		_p('add_executable("%s"', prj.name)
-	end
-	m.files(prj)
-	_p(')')
+
+		if prj.kind == 'StaticLib' then
+			_p('add_library("%s" STATIC', prj.name)
+		elseif prj.kind == 'SharedLib' then
+			_p('add_library("%s" SHARED', prj.name)
+		else
+			if prj.executable_suffix then
+				_p('set(CMAKE_EXECUTABLE_SUFFIX "%s")', prj.executable_suffix)
+			end
+			_p('add_executable("%s"', prj.name)
+		end
+		m.files(prj)
+		_p(')')
+    end
 
 	local standard = {}
 	standard["C++98"] = 98
